@@ -1,0 +1,159 @@
+<!doctype html>
+<!--
+  PassReg — markup reference (terminal direction)
+  ----------------------------------------------------------------------------
+  STATIC skeleton showing the exact DOM structure + class names that passreg.css
+  styles. There is NO logic here. Every spot your generator must drive is marked
+  with a  <!-- HOOK: ... -->  comment. See INTEGRATION.md.
+
+  To preview the look standalone, this file links passreg.css and loads the font.
+  Replace the static sample values with your real state when you port it.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PassReg — markup reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="passreg.css" />
+  <style>
+    html, body { margin: 0; background: #18140f; min-height: 100vh; }
+    .stage { max-width: 880px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <!-- data-accent selects the theme: amber | phosphor | cyan | crimson -->
+    <!-- data-rules="1" shows the ── ascii ── section rules; "0" shows plain caps labels -->
+    <div class="dirC" data-accent="amber" data-rules="1">
+
+      <header class="C-head">
+        <span class="C-prompt">$&nbsp;passreg&nbsp;<span class="C-flag">--generate</span></span>
+        <span class="C-meta">v0.1.0 · local-only · 2026</span>
+      </header>
+
+      <section class="C-intro">
+        <h1>PassReg<span class="C-cursor" data-on="true">▌</span></h1>
+        <!-- HOOK[cursor-blink]: toggle the .C-cursor data-on attribute true/false on a ~540ms interval -->
+        <p>
+          A password generator that runs entirely in your browser.<br />
+          No servers. No accounts. No syncing.
+        </p>
+      </section>
+
+      <!-- ── MODE ─────────────────────────────────────────────────────────── -->
+      <section class="C-section">
+        <div class="C-sec-head">── mode ──────────────────────────────────────────────────────────</div>
+        <div class="C-sec-body">
+          <div class="C-tabs">
+            <!-- HOOK[mode]: add class "on" to the active tab; clicking switches your generator mode.
+                 The active tab's .C-pre shows ▶, inactive shows a blank space. -->
+            <button class="C-tab on"><span class="C-pre">▶</span>memorable</button>
+            <button class="C-tab"><span class="C-pre">&nbsp;</span>random</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── OUTPUT ───────────────────────────────────────────────────────── -->
+      <section class="C-section">
+        <div class="C-sec-head">── output ────────────────────────────────────────────────────────</div>
+        <div class="C-sec-body">
+          <div class="C-pw-wrap">
+            <span class="C-prompt-mini">»</span>
+            <!-- HOOK[password]: print the generated password string here.
+                 When hidden, add class "hide" and render bullets (•) instead. -->
+            <div class="C-pw">Tiny98%Digs50.Tiger</div>
+            <!-- HOOK[hide-toggle]: flips .C-pw .hide on/off; label text swaps hide/show -->
+            <button class="C-eye">hide</button>
+          </div>
+
+          <!-- HOOK[memo]: render ONLY in memorable mode when a "picture" phrase exists; otherwise omit this block -->
+          <div class="C-memo">
+            <div class="C-memo-top">─── picture ───</div>
+            <div class="C-memo-body">a tiny tiger digs barley</div>
+          </div>
+
+          <div class="C-actions">
+            <!-- HOOK[copy]: writes password to clipboard. On success add class "hot" and swap label to "copied ✓" for ~1.5s -->
+            <button class="C-bracket">[ ⎘ copy ]</button>
+            <!-- HOOK[regen]: re-runs your generator with the current mode + options -->
+            <button class="C-bracket">[ ↻ new ]</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── STRENGTH ─────────────────────────────────────────────────────── -->
+      <section class="C-section">
+        <div class="C-sec-head">── strength ──────────────────────────────────────────────────────</div>
+        <div class="C-sec-body">
+          <div class="C-strength">
+            <!-- HOOK[strength-tone]: set tone class on BOTH .C-gauge and .C-strength-lbl
+                 to one of: tone-weak | tone-fair | tone-good -->
+            <div class="C-gauge tone-good">
+              <!-- HOOK[strength-ratio]: set inline style width to ratio*100% (0–100) -->
+              <div class="C-gauge-fill" style="width: 72%"></div>
+            </div>
+            <div class="C-strength-meta">
+              <!-- HOOK[strength-label]: lowercase label -->
+              <span class="C-strength-lbl tone-good">strong</span>
+              <!-- HOOK[strength-bits]: estimated entropy -->
+              <span class="C-bits"> · ~78 bits</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── OPTIONS ──────────────────────────────────────────────────────── -->
+      <section class="C-section">
+        <div class="C-sec-head">── options ───────────────────────────────────────────────────────</div>
+        <div class="C-sec-body">
+          <!-- HOOK[option]: each row toggles a generator flag. Checked = class "on" on .C-cb and [x]; unchecked = [ ] -->
+          <label class="C-opt-row C-opt-checkable">
+            <span class="C-opt-l">
+              <span class="C-cb on">[x]</span>
+              <input type="checkbox" checked />
+              <span class="C-opt-name">symbols</span>
+            </span>
+            <span class="C-opt-r">! @ # $ % ^ &amp; * ?</span>
+          </label>
+
+          <label class="C-opt-row C-opt-checkable">
+            <span class="C-opt-l">
+              <span class="C-cb on">[x]</span>
+              <input type="checkbox" checked />
+              <span class="C-opt-name">dashes/underscores</span>
+            </span>
+            <span class="C-opt-r">- _</span>
+          </label>
+
+          <label class="C-opt-row C-opt-checkable">
+            <span class="C-opt-l">
+              <span class="C-cb on">[x]</span>
+              <input type="checkbox" checked />
+              <span class="C-opt-name">digits</span>
+            </span>
+            <span class="C-opt-r">0–9</span>
+          </label>
+
+          <!-- HOOK[length]: render this row ONLY in random mode. Bind range + 2-digit readout to generator length -->
+          <div class="C-opt-row">
+            <span class="C-opt-l">length</span>
+            <span class="C-opt-mid">
+              <input type="range" min="8" max="48" value="20" />
+            </span>
+            <span class="C-opt-r">20</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOOK[rules]: render this divider only when data-rules="1" -->
+      <div class="C-divider">────────────────────────────────────────────────────────────────────────</div>
+
+      <footer class="C-foot">
+        <span class="C-foot-note">crypto.getRandomValues() · open source · MIT</span>
+      </footer>
+
+    </div>
+  </div>
+</body>
+</html>

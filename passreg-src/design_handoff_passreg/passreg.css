@@ -1,0 +1,245 @@
+/* ============================================================================
+   PassReg — design stylesheet (terminal direction)
+   ----------------------------------------------------------------------------
+   This is the COMPLETE visual layer: tokens, layout, components, animations.
+   It contains NO password logic. Wire your existing generator to the markup
+   in markup-reference.html — see INTEGRATION.md for the exact seams.
+
+   Fonts: IBM Plex Mono (weights 400/500/600). Load via Google Fonts or self-host:
+     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+   Accent themes: set data-accent="amber|phosphor|cyan|crimson" on .dirC
+   ============================================================================ */
+
+.dirC {
+  --c-bg: #18140f;
+  --c-panel: #1f1a14;
+  --c-ink: #e9e0c8;
+  --c-ink-hi: #f3eada;
+  --c-ink-mid: #d4c9a6;
+  --c-muted: #b8aa8c;
+  --c-muted-lo: #8a7f64;
+  --c-muted-soft: #5e5644;
+  --c-rule: #3a3326;
+  --c-good: #9ec57a;
+  --c-weak: #d96e54;
+  --c-accent: #e3a14a;
+  --c-accent-hi: #f0b25c;
+}
+.dirC[data-accent="phosphor"] { --c-accent: #9ec57a; --c-accent-hi: #b8d995; }
+.dirC[data-accent="cyan"]     { --c-accent: #6cb8b8; --c-accent-hi: #84cccc; }
+.dirC[data-accent="crimson"]  { --c-accent: #d96e54; --c-accent-hi: #ed8a72; }
+
+.dirC {
+  width: 100%; min-height: 100%; box-sizing: border-box;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font: 14px/1.55 "IBM Plex Mono", ui-monospace, monospace;
+  padding: 48px 64px;
+  position: relative;
+}
+.dirC::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(at 80% 20%, color-mix(in oklab, var(--c-accent) 8%, transparent), transparent 50%),
+    radial-gradient(at 20% 80%, rgba(0,0,0,.4), transparent 60%);
+}
+/* Very faint scanlines — invisible at a glance, gives the surface a slight
+   CRT texture. Period of 3px so it survives at any zoom without aliasing. */
+.dirC::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.10) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: .55;
+}
+.dirC > * { position: relative; z-index: 1; }
+
+.C-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12.5px; color: var(--c-muted);
+  padding-bottom: 14px;
+  border-bottom: 1px solid color-mix(in oklab, var(--c-ink) 14%, transparent);
+}
+.C-prompt { color: var(--c-muted); }
+.C-flag { color: var(--c-accent); }
+.C-meta { color: var(--c-muted-lo); font-size: 11.5px; letter-spacing: .04em; }
+
+.C-intro { padding: 36px 0 24px; }
+.C-intro h1 {
+  font: 600 38px "IBM Plex Mono", monospace;
+  margin: 0 0 14px; letter-spacing: -.01em;
+  color: var(--c-ink-hi);
+  text-shadow: 0 0 12px color-mix(in oklab, var(--c-ink-hi) 30%, transparent);
+}
+.C-cursor {
+  color: var(--c-accent); margin-left: 6px;
+  text-shadow: 0 0 10px color-mix(in oklab, var(--c-accent) 60%, transparent);
+  transition: opacity .1s;
+}
+.C-cursor[data-on="false"] { opacity: 0; }
+.C-intro p { margin: 0; color: var(--c-muted); font-size: 13.5px; }
+
+.C-section { margin-top: 18px; }
+.C-sec-head {
+  color: var(--c-muted-soft);
+  font-size: 13px;
+  letter-spacing: -.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.C-sec-head.plain {
+  color: var(--c-muted-lo);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.C-sec-body { padding: 0; }
+
+.C-tabs { display: flex; gap: 24px; }
+.C-tab {
+  appearance: none; border: 0; background: transparent;
+  font: 400 15px "IBM Plex Mono", monospace;
+  color: var(--c-muted-lo); cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.C-tab .C-pre { color: var(--c-accent); width: 12px; display: inline-block; }
+.C-tab.on { color: var(--c-ink); }
+
+.C-pw-wrap {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--c-panel);
+  border: 1px solid color-mix(in oklab, var(--c-ink) 12%, transparent);
+  padding: 12px 8px 12px 18px;
+}
+.C-prompt-mini { color: var(--c-accent); flex-shrink: 0; font-weight: 600; }
+.C-pw {
+  flex: 1; min-width: 0;
+  font: 500 20px "IBM Plex Mono", monospace;
+  color: var(--c-ink-hi); word-break: break-all;
+  line-height: 1.3; letter-spacing: -.005em;
+  text-shadow: 0 0 8px color-mix(in oklab, var(--c-ink-hi) 25%, transparent);
+}
+.C-pw.hide { color: var(--c-muted-lo); letter-spacing: .1em; text-shadow: none; }
+.C-eye {
+  appearance: none; border: 0; background: transparent;
+  color: var(--c-muted); cursor: pointer; flex-shrink: 0;
+  font: 400 12.5px "IBM Plex Mono", monospace;
+  padding: 8px 14px;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--c-muted) 35%, transparent);
+  text-underline-offset: 4px;
+  transition: color .12s, text-decoration-color .12s;
+}
+.C-eye:hover { color: var(--c-accent); text-decoration-color: var(--c-accent); }
+
+.C-memo {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px dashed color-mix(in oklab, var(--c-ink) 14%, transparent);
+}
+.C-memo-top { font-size: 11px; color: var(--c-muted-lo); margin-bottom: 6px; }
+.C-memo-body { color: var(--c-ink-mid); font-style: italic; font-size: 13.5px; }
+
+.C-actions { display: flex; gap: 8px; margin-top: 16px; }
+/* V1 bracket buttons — accent-bordered, equal weight for copy + regen. */
+.C-bracket {
+  appearance: none; cursor: pointer;
+  border: 1px solid var(--c-accent);
+  background: transparent; color: var(--c-accent);
+  font: 500 13px "IBM Plex Mono", monospace;
+  padding: 11px 22px;
+  letter-spacing: .02em;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.C-bracket:hover { background: color-mix(in oklab, var(--c-accent) 12%, transparent); }
+.C-bracket.hot {
+  border-color: var(--c-good); color: var(--c-good);
+  background: color-mix(in oklab, var(--c-good) 12%, transparent);
+}
+
+.C-strength { display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; }
+/* Block-style gauge as CSS patterns so it stays sharp at any canvas zoom. */
+.C-gauge {
+  position: relative;
+  flex: 1 1 auto; min-width: 0;
+  height: 12px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    to right,
+    color-mix(in oklab, var(--c-ink) 16%, transparent) 0 6px,
+    transparent 6px 8px
+  );
+}
+.C-gauge-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    to right,
+    currentColor 0 6px,
+    transparent 6px 8px
+  );
+  filter: drop-shadow(0 0 4px color-mix(in oklab, currentColor 45%, transparent));
+  transition: width .25s cubic-bezier(.3,.7,.4,1);
+}
+.C-gauge.tone-good { color: var(--c-good); }
+.C-gauge.tone-fair { color: var(--c-accent); }
+.C-gauge.tone-weak { color: var(--c-weak); }
+.C-strength-meta {
+  /* Fixed width so the gauge length doesn't reflow when the label text
+     changes (weak / fair / strong / very strong + bit count). */
+  width: 180px;
+  text-align: right;
+  font-size: 13px;
+  color: var(--c-muted-lo);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.C-strength-lbl.tone-good { color: var(--c-good); }
+.C-strength-lbl.tone-fair { color: var(--c-accent); }
+.C-strength-lbl.tone-weak { color: var(--c-weak); }
+.C-bits { color: var(--c-muted-lo); }
+
+.C-opt-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0;
+  cursor: pointer; user-select: none;
+}
+.C-opt-checkable input { position: absolute; opacity: 0; pointer-events: none; }
+.C-opt-l { display: inline-flex; align-items: center; gap: 12px; color: var(--c-ink-mid); }
+.C-cb { color: var(--c-accent); font-weight: 500; }
+.C-cb.on { color: var(--c-good); }
+.C-opt-name { font-size: 14px; }
+.C-opt-r { color: var(--c-muted-lo); font-size: 13px; }
+.C-opt-mid { flex: 1; padding: 0 18px; }
+.C-opt-mid input[type="range"] {
+  appearance: none; width: 100%; height: 2px;
+  background: color-mix(in oklab, var(--c-ink) 18%, transparent); cursor: pointer;
+}
+.C-opt-mid input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px;
+  background: var(--c-accent); border: 0; cursor: pointer; border-radius: 0;
+}
+.C-opt-mid input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; background: var(--c-accent); border: 0; cursor: pointer; border-radius: 0;
+}
+
+.C-divider {
+  color: var(--c-rule);
+  font-size: 12px;
+  letter-spacing: -.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 22px 0 18px;
+}
+
+.C-foot {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.C-foot-note { color: var(--c-muted-soft); font-size: 11.5px; letter-spacing: .04em; }
