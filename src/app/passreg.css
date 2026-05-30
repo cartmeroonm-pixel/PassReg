@@ -63,7 +63,7 @@
 .C-flag { color: var(--c-accent); }
 .C-meta { color: var(--c-muted-lo); font-size: 11.5px; letter-spacing: .04em; }
 
-.C-intro { padding: 36px 0 24px; }
+.C-intro { padding: 26px 0 12px; }
 .C-intro h1 {
   font: 600 38px "IBM Plex Mono", monospace;
   margin: 0 0 14px; letter-spacing: -.01em;
