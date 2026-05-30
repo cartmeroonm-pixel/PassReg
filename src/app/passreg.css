@@ -36,7 +36,7 @@
   /* no background — transparent, body gradient shows through */
   color: var(--c-ink);
   font: 14px/1.55 "IBM Plex Mono", ui-monospace, monospace;
-  padding: 40px clamp(1%, 9vw, 10%);
+  padding: 30px clamp(1%, 9vw, 10%);
   position: relative;
 }
 /* Very faint scanlines — invisible at a glance, gives the surface a slight
